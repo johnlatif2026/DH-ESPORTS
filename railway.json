@@ -1,0 +1,12 @@
+{
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@railway/app-node",
+      "config": {
+        "installCommand": "npm install",
+        "startCommand": "npm start"
+      }
+    }
+  ]
+}
