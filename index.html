@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clan TRIPxESPORTS</title>
+  <link rel="icon" href="https://i.postimg.cc/0yvHTB0r/IMG-20260301-WA0034.jpg" type="image/png">  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              light: '#4f46e5',
+              dark: '#6366f1'
+            },
+            secondary: {
+              light: '#10b981',
+              dark: '#34d399'
+            }
+          },
+          fontFamily: {
+            'tajawal': ['Tajawal', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
+    
+    body {
+      font-family: 'Tajawal', sans-serif;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-link {
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    
+    .nav-link:after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      right: 0;
+      background-color: currentColor;
+      transition: width 0.3s ease;
+    }
+    
+    .nav-link:hover:after {
+      width: 100%;
+    }
+    
+    .service-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .mobile-menu {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease-out;
+    }
+    
+    .mobile-menu.active {
+      max-height: 500px;
+    }
+
+    /* تحسينات الدارك مود */
+    .dark .service-card {
+      background-color: #1f2937;
+      border-color: #374151;
+    }
+    
+    .dark .text-gray-600 {
+      color: #d1d5db;
+    }
+    
+    .dark .bg-gray-100 {
+      background-color: #111827;
+    }
+    
+    .dark .border-gray-300 {
+      border-color: #4b5563;
+    }
+
+    /* تحسينات الهاتف */
+    @media (max-width: 640px) {
+      .hero-section h1 {
+        font-size: 2rem;
+        line-height: 1.2;
+      }
+      
+      .hero-section p {
+        font-size: 1rem;
+      }
+      
+      .service-card {
+        margin-bottom: 1.5rem;
+      }
+      
+      section {
+        padding: 3rem 1rem;
+      }
+      
+      .text-4xl {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-100">
+  <!-- شريط التنقل -->
+  <header class="sticky top-0 z-50 bg-white/80 dark:bg-gray-800/80 backdrop-blur-md shadow-sm">
+    <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+      <!-- الشعار -->
+<a href="#home" class="flex items-center space-x-2">
+  <img src="https://i.postimg.cc/0yvHTB0r/IMG-20260301-WA0034.jpg" alt="شعار الكلان" class="w-10 h-10 rounded-full object-cover">
+  <span class="text-xl font-bold bg-gradient-to-r from-primary-light to-primary-dark bg-clip-text text-transparent">Clan TRIPxESPORTS</span>
+</a>
+
+      <!-- قائمة التنقل الرئيسية -->
+      <nav class="hidden md:flex space-x-1">
+        <a href="#home" class="nav-link px-4 py-2 font-medium text-gray-800 dark:text-gray-200">الرئيسية</a>
+        <a href="#booking" class="nav-link px-4 py-2 font-medium text-gray-800 dark:text-gray-200">تقديم الكلان</a>
+        <a href="#result" class="nav-link px-4 py-2 font-medium text-gray-800 dark:text-gray-200">الاستعلام عن النتيجة</a>
+        <a href="#Our service" class="nav-link px-4 py-2 font-medium text-gray-800 dark:text-gray-200">خدماتنا</a>
+        <a href="#معلومات_عنّا" class="nav-link px-4 py-2 font-medium text-gray-800 dark:text-gray-200">معلومات عنا</a>
+        <a href="#inquiries" class="nav-link px-4 py-2 font-medium text-gray-800 dark:text-gray-200">اتصل بنا</a>
+      </nav>
+      
+      <!-- زر الوضع الداكن/الفاتح -->
+      <button id="themeToggle" class="p-2 rounded-full focus:outline-none">
+        <i id="themeIcon" class="fas fa-moon text-gray-600 dark:text-yellow-300"></i>
+      </button>
+      
+      <!-- زر القائمة المتنقلة -->
+      <button id="mobileMenuButton" class="md:hidden p-2 rounded-full focus:outline-none">
+        <i class="fas fa-bars text-gray-600 dark:text-gray-300"></i>
+      </button>
+    </div>
+    
+    <!-- القائمة المتنقلة -->
+    <div id="mobileMenu" class="mobile-menu md:hidden bg-white dark:bg-gray-800 shadow-lg">
+      <div class="container mx-auto px-4 py-2 flex flex-col space-y-2">
+        <a href="#home" class="nav-link px-4 py-2 font-medium text-gray-800 dark:text-gray-200">الرئيسية</a>
+        <a href="#booking" class="nav-link px-4 py-2 font-medium text-gray-800 dark:text-gray-200">تقديم الكلان</a>
+        <a href="#result" class="nav-link px-4 py-2 font-medium text-gray-800 dark:text-gray-200">الاستعلام عن النتيجة</a>
+        <a href="#Our service" class="nav-link px-4 py-2 font-medium text-gray-800 dark:text-gray-200">خدماتنا</a>
+        <a href="#معلومات_عنّا" class="nav-link px-4 py-2 font-medium text-gray-800 dark:text-gray-200">معلومات عنا</a>
+        <a href="#inquiries" class="nav-link px-4 py-2 font-medium text-gray-800 dark:text-gray-200">اتصل بنا</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- القسم الرئيسي -->
+  <section id="home" class="hero-section min-h-screen flex items-center justify-center text-center">
+    <div class="container mx-auto px-4 py-20">
+      <h1 class="text-4xl md:text-6xl font-bold mb-6 text-black dark:text-white">مرحبًا بكم في <span class="text-primary-light">Clan TRIPxESPORTS</span></h1>
+      <p class="text-xl md:text-2xl mb-8 max-w-2xl mx-auto text-black dark:text-white">إذا كان هناك مشكلة، نحن تحت أمرك</p>
+      <div class="flex flex-wrap justify-center gap-4">
+        <a href="#booking" class="bg-primary-light hover:bg-primary-dark text-white px-8 py-3 rounded-full font-medium transition-all duration-300 transform hover:scale-105">
+          انضم إلينا الآن
+        </a>
+        <a href="#Our service" class="bg-primary-light hover:bg-primary-dark text-white px-8 py-3 rounded-full font-medium transition-all duration-300 transform hover:scale-105">
+          اكتشف خدماتنا
+        </a>
+      </div>
+    </div>
+    
+    <!-- زر التمرير للأسفل -->
+    <a href="#Our service" class="absolute bottom-10 left-1/2 transform -translate-x-1/2 text-white text-2xl animate-bounce">
+      <i class="fas fa-chevron-down"></i>
+    </a>
+  </section>
+
+  <!-- قسم معلومات عنا -->
+  <section id="معلومات_عنّا" class="py-16 bg-gray-100 dark:bg-gray-800">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-800 dark:text-gray-200">معلومات عنا</h2>
+        <div class="w-20 h-1 bg-primary-light mx-auto"></div>
+      </div>
+      
+      <div class="grid md:grid-cols-2 gap-8 items-center">
+        <div class="order-2 md:order-1">
+          <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-200">فريق Clan TRIPxESPORTS</h3>
+          <p class="text-lg mb-6 text-gray-600 dark:text-gray-300">
+            نحن خدمة العملاء Clan TRIPxESPORTS انشئنا هذا الموقع لاجل اذا وجد مشكلة يتم التواصل معنا عبر الموقع او عبر ارقام التليفونات التي توجد المدونة تحت
+          </p>
+          
+          <div class="space-y-4">
+            <div class="flex items-start">
+              <div class="flex-shrink-0 mt-1 mr-3 text-primary-light">
+                <i class="fas fa-user-shield text-xl"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-gray-800 dark:text-gray-200">TRIPxBA7R丶69</h4>
+                <p class="text-gray-600 dark:text-gray-300">الليدر</p>
+              </div>
+            </div>
+
+            <div class="flex items-start">
+              <div class="flex-shrink-0 mt-1 mr-3 text-primary-light">
+                <i class="fas fa-gamepad text-xl"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-gray-800 dark:text-gray-200">TRIPxKASPER丶69</h4>
+                <p class="text-gray-600 dark:text-gray-300">كو ليدر</p>
+              </div>
+            </div>
+
+            <div class="flex items-start">
+              <div class="flex-shrink-0 mt-1 mr-3 text-primary-light">
+                <i class="fas fa-gamepad text-xl"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-gray-800 dark:text-gray-200">TRIPxGOLD丶69</h4>
+                <p class="text-gray-600 dark:text-gray-300">تيستر</p>
+              </div>
+            </div>
+
+            <div class="flex items-start">
+              <div class="flex-shrink-0 mt-1 mr-3 text-primary-light">
+                <i class="fas fa-gamepad text-xl"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-gray-800 dark:text-gray-200">YOUSSEF</h4>
+                <p class="text-gray-600 dark:text-gray-300">تيستر</p>
+              </div>
+            </div>
+            
+            <div class="flex items-start">
+              <div class="flex-shrink-0 mt-1 mr-3 text-primary-light">
+                <i class="fas fa-gamepad text-xl"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-gray-800 dark:text-gray-200">TRIPxJOHN丶69</h4>
+                <p class="text-gray-600 dark:text-gray-300">سوشيال الكلان</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="order-1 md:order-2">
+          <div class="bg-white dark:bg-gray-700 p-2 rounded-xl shadow-lg">
+            <img src="https://images.unsplash.com/photo-1560253023-3ec5d502959f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" 
+                 alt="فريق Clan King" 
+                 class="w-full h-auto rounded-lg">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- قسم خدماتنا -->
+  <section id="Our service" class="py-16 bg-white dark:bg-gray-900">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-800 dark:text-gray-200">خدماتنا</h2>
+        <div class="w-20 h-1 bg-primary-light mx-auto"></div>
+      </div>
+      
+      <div class="grid md:grid-cols-3 gap-8">
+        <!-- بطاقة الخدمة 1 -->
+        <div class="service-card bg-gray-50 dark:bg-gray-800 rounded-xl p-6 shadow-md border border-gray-200 dark:border-gray-700">
+          <div class="w-14 h-14 bg-primary-light/10 text-primary-light rounded-full flex items-center justify-center mb-4">
+            <i class="fas fa-headset text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3 text-gray-800 dark:text-gray-200">الاتصال بنا</h3>
+          <p class="text-gray-600 dark:text-gray-300 mb-4">تواصل معنا عبر الواتساب للحصول على الدعم الفوري</p>
+          <div class="space-y-2">
+            <a href="https://wa.me/201055930595" class="inline-flex items-center text-primary-light hover:text-primary-dark">
+              <i class="fab fa-whatsapp mr-2"></i> TRIPxBA7R丶69
+            </a>
+            <br>
+            <a href="https://wa.me/201095096539" class="inline-flex items-center text-primary-light hover:text-primary-dark">
+              <i class="fab fa-whatsapp mr-2"></i> TRIPxKASPER丶69
+            </a>
+            <br>
+            <a href="https://wa.me/201229180215" class="inline-flex items-center text-primary-light hover:text-primary-dark">
+            <i class="fab fa-whatsapp mr-2"></i> TRIPxGOLD丶69
+            </a>
+            <br>
+            <a href="https://wa.me/201275032708" class="inline-flex items-center text-primary-light hover:text-primary-dark">
+            <i class="fab fa-whatsapp mr-2"></i> YOUSSEF
+            </a>
+            <br>
+            <a href="https://wa.me/201274445091" class="inline-flex items-center text-primary-light hover:text-primary-dark">
+              <i class="fab fa-whatsapp mr-2"></i> TRIPxJOHN丶69
+            </a>
+          </div>
+        </div>
+        
+        <!-- بطاقة الخدمة 2 -->
+        <div class="service-card bg-gray-50 dark:bg-gray-800 rounded-xl p-6 shadow-md border border-gray-200 dark:border-gray-700">
+          <div class="w-14 h-14 bg-primary-light/10 text-primary-light rounded-full flex items-center justify-center mb-4">
+            <i class="fas fa-trophy text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3 text-gray-800 dark:text-gray-200">مميزات الكلان</h3>
+          <ul class="text-gray-600 dark:text-gray-300 space-y-2">
+            <li class="flex items-start">
+              <i class="fas fa-check text-primary-light mt-1 mr-2"></i>
+              <span>اسكرمات وبطولات يومية</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fas fa-check text-primary-light mt-1 mr-2"></i>
+              <span>حلبات للكلان أسبوعياً</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fas fa-check text-primary-light mt-1 mr-2"></i>
+              <span>مساعدة الأعضاء على التطوير</span>
+            </li>
+            <li>
+                <i class="fas fa-check text-primary-light mt-1 mr-2"></i>
+                <span>مساعدة الاعضاء في التقييم</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fas fa-check text-primary-light mt-1 mr-2"></i>
+              <span>متجر لشحن ببجي وبيع وشراء الشعبية</span>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- بطاقة الخدمة 3 -->
+        <div class="service-card bg-gray-50 dark:bg-gray-800 rounded-xl p-6 shadow-md border border-gray-200 dark:border-gray-700">
+          <div class="w-14 h-14 bg-primary-light/10 text-primary-light rounded-full flex items-center justify-center mb-4">
+            <i class="fas fa-clipboard-list text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-3 text-gray-800 dark:text-gray-200">شروط الكلان</h3>
+          <ul class="text-gray-600 dark:text-gray-300 space-y-2">
+            <li class="flex items-start">
+              <i class="fas fa-check text-primary-light mt-1 mr-2"></i>
+              <span>ناضج وعاقل</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fas fa-check text-primary-light mt-1 mr-2"></i>
+              <span>60 فريم فما فوق</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fas fa-check text-primary-light mt-1 mr-2"></i>
+              <span>لاعب اسكرمات</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fas fa-check text-primary-light mt-1 mr-2"></i>
+              <span>كارت ايدي</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fas fa-check text-primary-light mt-1 mr-2"></i>
+              <span>فيديو من دقيقة ل دقيقتين</span>
+            </li>
+            <li class="flex items-start">
+              <i class="fas fa-check text-primary-light mt-1 mr-2"></i>
+              <span>احترام أعضاء الكلان</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- قسم المواقع الخاصة بالكلان -->
+      <div class="mt-16 bg-gradient-to-r from-primary-light to-primary-dark rounded-xl p-8 text-white">
+        <h3 class="text-2xl font-bold mb-4">المواقع الخاصة بكلان "Clan TRIPxESPORTS"</h3>
+        <div class="bg-white/10 rounded-lg p-4 inline-block hover:bg-white/20 transition-all">
+          <a href="" class="flex items-center">
+            <i class="fas fa-store mr-2"></i>
+            <span>موقع الاستور</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- قسم تقديم الكلان -->
+  <section id="booking" class="py-16 bg-gray-100 dark:bg-gray-800">
+    <div class="container mx-auto px-4 max-w-3xl">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-800 dark:text-gray-200">تقديم الكلان</h2>
+        <div class="w-20 h-1 bg-primary-light mx-auto"></div>
+      </div>
+      
+      <div class="bg-white dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden">
+        <div class="p-6 md:p-8">
+          <form id="bookingForm" enctype="multipart/form-data">
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <label for="bName" class="block text-sm font-medium mb-1 text-gray-800 dark:text-gray-200">الاسم الكامل</label>
+                <input type="text" id="bName" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-transparent" required>
+              </div>
+              
+              <div>
+                <label for="bEmail" class="block text-sm font-medium mb-1 text-gray-800 dark:text-gray-200">البريد الإلكتروني</label>
+                <input type="email" id="bEmail" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-transparent" required>
+              </div>
+              
+              <div>
+                <label for="bPhone" class="block text-sm font-medium mb-1 text-gray-800 dark:text-gray-200">رقم الهاتف</label>
+                <input type="tel" id="bPhone" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-transparent" required>
+              </div>
+
+               <div>
+                <label for="bScrim" class="block text-sm font-medium mb-1 text-gray-800 dark:text-gray-200">مركزك في الاسكريم</label>
+                <select id="bScrim" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-transparent" required>
+                  <option value="">اختر مركزك في الاسكريم</option>
+                  <option value="IGL">IGL</option>
+                  <option value="Fragger">Fragger</option>
+                  <option value="Supporter">Supporter</option>
+                  <option value="Scouter">Scouter</option>
+                  <option value="Flanker">Flanker</option>
+                </select>
+               </div>
+              
+              <div>
+                <label for="bDuration" class="block text-sm font-medium mb-1 text-gray-800 dark:text-gray-200">عدد الفريمات</label>
+                <select id="bDuration" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-transparent" required>
+                  <option value="">اختر عدد الفريمات</option>
+                  <option value="30">30</option>
+                  <option value="40">40</option>
+                  <option value="60">60</option>
+                  <option value="90">90</option>
+                  <option value="120">120</option>
+                </select>
+              </div>
+              
+              <div>
+                <label for="bAge" class="block text-sm font-medium mb-1 text-gray-800 dark:text-gray-200">السن</label>
+                <input type="text" id="bAge" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-transparent" placeholder="أدخل سن اللاعب" required>
+              </div>
+              
+              <div class="md:col-span-2">
+                <label for="bGameVideo" class="block text-sm font-medium mb-1 text-gray-800 dark:text-gray-200">رفع فيديو اللعب (حد أقصى 2 دقيقة)</label>
+                <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 text-center">
+                  <input type="file" id="bGameVideo" name="bGameVideo" accept="video/*" class="hidden" required>
+                  <label for="bGameVideo" class="cursor-pointer">
+                    <i class="fas fa-cloud-upload-alt text-3xl text-primary-light mb-2"></i>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">اضغط لرفع الفيديو أو اسحبه هنا</p>
+                    <p id="fileName" class="text-xs text-gray-400 mt-2"></p>
+                  </label>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mt-6">
+              <button type="submit" class="w-full bg-primary-light hover:bg-primary-dark text-white py-3 px-6 rounded-lg font-medium transition-all duration-300 transform hover:scale-[1.02]">
+                تقديم الطلب
+              </button>
+              <p class="text-sm text-center mt-2 text-gray-500 dark:text-gray-400">برجاء الضغط على زر "تقديم الطلب" مرة واحدة فقط</p>
+            </div>
+          </form>
+          
+          <div id="bookingResponse" class="mt-4 text-center hidden"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- قسم الاستعلام عن النتيجة -->
+  <section id="result" class="py-16 bg-white dark:bg-gray-900">
+    <div class="container mx-auto px-4 max-w-3xl">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-800 dark:text-gray-200">استعلم عن نتيجة التقديم</h2>
+        <div class="w-20 h-1 bg-primary-light mx-auto"></div>
+        <p class="mt-4 text-gray-600 dark:text-gray-300">
+          برجاء اذا ظهرت لك رسالة عرض النتيجة وضغط عليها ثم ظهرت لك "لا توجد نتائج لهذا الرقم"
+          <br>
+          برجاء اعادة الصفحة (refresh/Reload)
+        </p>
+      </div>
+      
+      <div class="bg-gray-100 dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+        <div class="p-6 md:p-8">
+          <form id="inquiryForm">
+            <div class="mb-6">
+              <label for="iPhone" class="block text-sm font-medium mb-1 text-gray-800 dark:text-gray-200">أدخل رقم الهاتف</label>
+              <input type="tel" id="iPhone" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-transparent" required>
+            </div>
+            
+            <button type="submit" class="w-full bg-green-500 hover:bg-green-600 text-white py-3 px-6 rounded-lg font-medium transition-all duration-300 transform hover:scale-[1.02]">
+              ابحث عن النتيجة
+            </button>
+          </form>
+          
+          <div id="inquiryResponse" class="mt-6 hidden">
+            <div class="bg-white dark:bg-gray-700 rounded-lg shadow-md p-6">
+              <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200">خيارات النتيجة</h3>
+                <button id="closeResult" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+              
+              <div id="resultOptions" class="space-y-4">
+                <button id="downloadResult" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg flex items-center justify-center space-x-2">
+                  <i class="fas fa-download"></i>
+                  <span>تحميل النتيجة</span>
+                </button>
+                
+                <button id="viewResult" class="w-full bg-primary-light hover:bg-primary-dark text-white py-2 px-4 rounded-lg flex items-center justify-center space-x-2">
+                  <i class="fas fa-eye"></i>
+                  <span>عرض النتيجة</span>
+                </button>
+              </div>
+              
+              <div id="resultViewer" class="mt-6 hidden">
+                <div id="loadingSpinner" class="flex justify-center items-center py-8">
+                  <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-light"></div>
+                </div>
+                
+                <iframe id="resultFrame" src="" class="w-full h-96 rounded-lg border border-gray-200 dark:border-gray-600 hidden"></iframe>
+                <img id="resultImage" src="" alt="النتيجة" class="w-full h-auto rounded-lg border border-gray-200 dark:border-gray-600 hidden">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- قسم اتصل بنا -->
+  <section id="inquiries" class="py-16 bg-gray-100 dark:bg-gray-800">
+    <div class="container mx-auto px-4 max-w-3xl">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4 text-gray-800 dark:text-gray-200">لو عندك استفسار!</h2>
+        <div class="w-20 h-1 bg-primary-light mx-auto"></div>
+      </div>
+      
+      <div class="bg-white dark:bg-gray-700 rounded-xl shadow-lg overflow-hidden">
+        <div class="p-6 md:p-8">
+          <form id="contactForm">
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <label for="cName" class="block text-sm font-medium mb-1 text-gray-800 dark:text-gray-200">الاسم</label>
+                <input type="text" id="cName" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-transparent" required>
+              </div>
+              
+              <div>
+                <label for="cEmail" class="block text-sm font-medium mb-1 text-gray-800 dark:text-gray-200">البريد الإلكتروني</label>
+                <input type="email" id="cEmail" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-transparent" required>
+              </div>
+              
+              <div>
+                <label for="cPhone" class="block text-sm font-medium mb-1 text-gray-800 dark:text-gray-200">رقم الهاتف</label>
+                <input type="tel" id="cPhone" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-transparent" required>
+              </div>
+              
+              <div class="md:col-span-2">
+                <label for="cMessage" class="block text-sm font-medium mb-1 text-gray-800 dark:text-gray-200">تفاصيل الرسالة</label>
+                <textarea id="cMessage" rows="4" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-light focus:border-transparent" required></textarea>
+              </div>
+            </div>
+            
+            <div id="contactResponse" class="mt-4"></div>
+            
+            <div class="mt-6">
+              <button type="submit" class="w-full bg-primary-light hover:bg-primary-dark text-white py-3 px-6 rounded-lg font-medium transition-all duration-300 transform hover:scale-[1.02]">
+                إرسال الرسالة
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- الفوتر -->
+  <footer class="bg-gray-900 text-white py-8">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <div class="mb-4 md:mb-0">
+          <a href="#" class="flex items-center space-x-2">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-r from-primary-light to-primary-dark flex items-center justify-center text-white">
+              <i class="fas fa-crown"></i>
+            </div>
+            <span class="text-xl font-bold">Clan TRIPxESPORTS</span>
+          </a>
+          <p class="mt-2 text-gray-400 text-sm">© 2025 Clan TRIPxESPORTS جميع الحقوق محفوظة.</p>
+        </div>
+        <div class="flex space-x-6">
+          <a href="https://chat.whatsapp.com/LjPa9KQWNDb9HEquhsuGvk?mode=gi_t" class="text-gray-400 hover:text-white transition-colors">
+            <i class="fab fa-whatsapp text-xl"></i>  
+            جروب الكلان
+        </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- زر العودة للأعلى -->
+  <a href="#home" id="backToTop" class="fixed bottom-6 right-6 bg-primary-light text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg hover:bg-primary-dark transition-all duration-300 transform hover:scale-110 hidden">
+    <i class="fas fa-arrow-up"></i>
+  </a>
+
+  <script>
+    // تبديل الوضع الداكن/الفاتح
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.documentElement.classList.add('dark');
+      themeIcon.classList.replace('fa-moon', 'fa-sun');
+    }
+    
+    themeToggle.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('darkMode', isDark);
+      
+      if (isDark) {
+        themeIcon.classList.replace('fa-moon', 'fa-sun');
+      } else {
+        themeIcon.classList.replace('fa-sun', 'fa-moon');
+      }
+    });
+    
+    // القائمة المتنقلة
+    const mobileMenuButton = document.getElementById('mobileMenuButton');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    mobileMenuButton.addEventListener('click', () => {
+      mobileMenu.classList.toggle('active');
+      mobileMenuButton.innerHTML = mobileMenu.classList.contains('active') ? 
+        '<i class="fas fa-times text-gray-600 dark:text-gray-300"></i>' : 
+        '<i class="fas fa-bars text-gray-600 dark:text-gray-300"></i>';
+    });
+    
+    // إغلاق القائمة عند النقر على رابط
+    document.querySelectorAll('#mobileMenu a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('active');
+        mobileMenuButton.innerHTML = '<i class="fas fa-bars text-gray-600 dark:text-gray-300"></i>';
+      });
+    });
+    
+    // عرض اسم الملف المرفوع
+    const fileInput = document.getElementById('bGameVideo');
+    const fileName = document.getElementById('fileName');
+    
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files.length > 0) {
+        fileName.textContent = fileInput.files[0].name;
+      } else {
+        fileName.textContent = '';
+      }
+    });
+    
+    // زر العودة للأعلى
+    const backToTop = document.getElementById('backToTop');
+    
+    window.addEventListener('scroll', () => {
+      if (window.pageYOffset > 300) {
+        backToTop.classList.remove('hidden');
+      } else {
+        backToTop.classList.add('hidden');
+      }
+    });
+    
+    // معالجة نموذج الحجز
+    const bookingForm = document.getElementById('bookingForm');
+    const bookingResponse = document.getElementById('bookingResponse');
+    
+    bookingForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData();
+      formData.append('bName', document.getElementById('bName').value);
+      formData.append('bEmail', document.getElementById('bEmail').value);
+      formData.append('bPhone', document.getElementById('bPhone').value);
+      formData.append('bScrim', document.getElementById('bScrim').value);
+      formData.append('bDuration', document.getElementById('bDuration').value);
+      formData.append('bAge', document.getElementById('bAge').value);
+      
+      if (fileInput.files[0]) {
+        formData.append('bGameVideo', fileInput.files[0]);
+      }
+      
+      try {
+        const res = await fetch('/api/booking', {
+          method: 'POST',
+          body: formData
+        });
+        
+        const data = await res.json();
+        
+        bookingResponse.classList.remove('hidden');
+        bookingResponse.innerHTML = `
+          <div class="p-4 rounded-lg ${res.ok ? 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-200' : 'bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200'}">
+            ${data.message || (res.ok ? 'تم تقديم طلبك بنجاح!' : 'حدث خطأ أثناء تقديم الطلب')}
+          </div>
+        `;
+        
+        if (res.ok) {
+          bookingForm.reset();
+          fileName.textContent = '';
+        }
+      } catch (error) {
+        bookingResponse.classList.remove('hidden');
+        bookingResponse.innerHTML = `
+          <div class="p-4 rounded-lg bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200">
+            تعذر الاتصال بالخادم. حاول مرة أخرى.
+          </div>
+        `;
+      }
+    });
+    
+    // معالجة نموذج الاستعلام عن النتيجة
+    const inquiryForm = document.getElementById('inquiryForm');
+    const inquiryResponse = document.getElementById('inquiryResponse');
+    const resultOptions = document.getElementById('resultOptions');
+    const resultViewer = document.getElementById('resultViewer');
+    const resultFrame = document.getElementById('resultFrame');
+    const resultImage = document.getElementById('resultImage');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const downloadResult = document.getElementById('downloadResult');
+    const viewResult = document.getElementById('viewResult');
+    const closeResult = document.getElementById('closeResult');
+    
+    let currentResult = null;
+    
+    inquiryForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const phone = document.getElementById('iPhone').value.trim();
+      
+      inquiryResponse.classList.remove('hidden');
+      resultOptions.classList.add('hidden');
+      resultViewer.classList.remove('hidden');
+      loadingSpinner.classList.remove('hidden');
+      resultFrame.classList.add('hidden');
+      resultImage.classList.add('hidden');
+      
+      try {
+        const response = await fetch(`/api/results/${encodeURIComponent(phone)}`);
+        const data = await response.json();
+        
+        if (data.success && data.results && data.results.length > 0) {
+          currentResult = data.results[0];
+          loadingSpinner.classList.add('hidden');
+          resultOptions.classList.remove('hidden');
+        } else {
+          showError(data.message || 'لا توجد نتائج لهذا الرقم');
+        }
+      } catch (error) {
+        console.error('Error fetching results:', error);
+        showError('تعذر الاتصال بالخادم. حاول مرة أخرى.');
+      }
+    });
+    
+    // تحميل النتيجة
+    downloadResult.addEventListener('click', () => {
+      if (currentResult && currentResult.fileUrl) {
+        const a = document.createElement('a');
+        a.href = currentResult.fileUrl;
+        a.download = 'نتيجة-ClanKing.pdf';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+    });
+    
+    // عرض النتيجة
+    viewResult.addEventListener('click', () => {
+      if (!currentResult) return;
+      
+      resultOptions.classList.add('hidden');
+      resultViewer.classList.remove('hidden');
+      loadingSpinner.classList.remove('hidden');
+      resultFrame.classList.add('hidden');
+      resultImage.classList.add('hidden');
+      
+      setTimeout(() => {
+        loadingSpinner.classList.add('hidden');
+        
+        if (currentResult.fileUrl.endsWith('.pdf')) {
+          resultFrame.src = currentResult.fileUrl;
+          resultFrame.classList.remove('hidden');
+        } else {
+          resultImage.src = currentResult.fileUrl;
+          resultImage.classList.remove('hidden');
+        }
+      }, 1000);
+    });
+    
+    function showError(message) {
+      resultViewer.innerHTML = `
+        <div class="text-center p-4 text-red-500 dark:text-red-400">
+          ${message}
+        </div>
+      `;
+      loadingSpinner.classList.add('hidden');
+    }
+    
+    // إغلاق عرض النتيجة
+    closeResult.addEventListener('click', () => {
+      inquiryResponse.classList.add('hidden');
+    });
+    
+    // معالجة نموذج الاتصال
+    document.getElementById('contactForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const name = document.getElementById('cName').value.trim();
+      const email = document.getElementById('cEmail').value.trim();
+      const phone = document.getElementById('cPhone').value.trim();
+      const message = document.getElementById('cMessage').value.trim();
+      
+      if (!name || !email || !phone || !message) {
+        document.getElementById('contactResponse').innerHTML = `
+          <div class="p-4 rounded-lg bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200">
+            من فضلك املأ جميع الحقول المطلوبة
+          </div>
+        `;
+        return;
+      }
+      
+      try {
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: name,
+            email: email,
+            phone: phone,
+            message: message
+          })
+        });
+        
+        const data = await response.json();
+        
+        const responseDiv = document.getElementById('contactResponse');
+        responseDiv.innerHTML = `
+          <div class="p-4 rounded-lg ${data.success ? 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-200' : 'bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200'}">
+            ${data.message}
+          </div>
+        `;
+        
+        if (data.success) {
+          document.getElementById('contactForm').reset();
+        }
+      } catch (error) {
+        console.error('Error submitting contact form:', error);
+        document.getElementById('contactResponse').innerHTML = `
+          <div class="p-4 rounded-lg bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-200">
+            حدث خطأ أثناء الإرسال. حاول مرة أخرى.
+          </div>
+        `;
+      }
+    });
+  </script>
+</body>
+</html>
