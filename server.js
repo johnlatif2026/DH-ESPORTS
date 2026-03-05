@@ -116,7 +116,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // منع تكرار دخول الأدمن للوجين
 app.use((req, res, next) => {
   if (req.session.adminLoggedIn && req.path === '/admin-login.html') {
-    return res.redirect('/admin/dashboard');
+    return res.redirect('/dashboard');
   }
   next();
 });
@@ -349,7 +349,7 @@ app.post('/api/contact', async (req, res) => {
 ========================= */
 
 app.get('/admin/dashboard', isAdminAuthenticated, (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'admin', 'dashboard.html'));
+  res.sendFile(path.join(__dirname, 'dashboard.html'));
 });
 
 app.get('/admin/data', isAdminAuthenticated, async (req, res) => {
