@@ -116,7 +116,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // منع تكرار دخول الأدمن للوجين
 app.use((req, res, next) => {
   if (req.session.adminLoggedIn && req.path === '/admin-login.html') {
-    return res.redirect('/dashboard');
+  return res.redirect('/admin/dashboard');
   }
   next();
 });
