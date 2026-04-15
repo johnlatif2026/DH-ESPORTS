@@ -627,10 +627,13 @@ app.get('/', (req, res) => {
    Start Server
 ========================= */
 
-ensureAdminUser().finally(() => {
-  app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-  }).on('error', (err) => {
-    console.error('Server error:', err);
-  });
-});
+let initialized = false;
+
+module.exports = async (req, res) => {
+  if (!initialized) {
+    await ensureAdminUser();
+    initialized = true;
+  }
+
+  return app(req, res);
+};
