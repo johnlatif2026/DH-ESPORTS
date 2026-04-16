@@ -475,12 +475,12 @@ app.delete('/admin/delete-inquiry/:id', isAdminAuthenticated, async (req, res) =
 // Send message (email)
 app.post('/admin/send-message', isAdminAuthenticated, async (req, res) => {
   try {
-    const { email, message, senderName = 'Clan King ESPORTS' } = req.body;
+    const { email, message, senderName = 'Clan DH-ESPORTS' } = req.body;
 
     await transporter.sendMail({
       from: `"${senderName}" <${process.env.SMTP_USER}>`,
       to: email,
-      subject: 'رسالة من كلان DH ESPORTS',
+      subject: 'رسالة من كلان clan DH_ESPORTS',
       html: `
 <div dir="rtl" style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
   <h2 style="color: #4f46e5;">رسالة من Clan DH ESPORTS</h2>
