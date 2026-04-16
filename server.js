@@ -4,7 +4,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const path = require('path');
-const fs = require('fs');
 const multer = require('multer');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
@@ -16,9 +15,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 /* =========================
-   Helpers
+   Cloudinary Config
 ========================= */
-
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
@@ -28,26 +26,27 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// ضمان وجود مجلدات ثابتة
-const ensureDir = (dir) => {
-  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-  return dir;
-};
+// إعداد تخزين Multer على Cloudinary مباشرة
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'dh-esports', // اسم المجلد في Cloudinary
+    allowed_formats: ['jpg', 'png', 'jpeg', 'mp4', 'webp', 'pdf'],
+    public_id: (req, file) => {
+      // إنشاء اسم فريد للملف
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      const originalName = file.originalname.split('.')[0].replace(/[^a-zA-Z0-9]/g, '_');
+      return `${uniqueSuffix}-${originalName}`;
+    },
+    resource_type: 'auto', // يتعامل تلقائياً مع الصور والفيديو
+  },
+});
 
-// مسار public/uploads
-const uploadsDir = ensureDir(path.join(__dirname, 'public', 'uploads'));
-
-// ربط آمن لمسارات الملفات المخزنة كـ "/uploads/xxx"
-const publicPathFromUrl = (urlPath) => {
-  // مهم: لو urlPath يبدأ بـ "/"، path.join هيهمل "public"
-  const clean = String(urlPath || '').replace(/^\//, '');
-  return path.join(__dirname, 'public', clean);
-};
+const upload = multer({ storage: storage });
 
 /* =========================
    Firebase Admin Init (Firestore)
 ========================= */
-
 if (!process.env.FIREBASE_CONFIG) {
   console.error('FIREBASE_CONFIG is missing in .env');
   process.exit(1);
@@ -70,23 +69,8 @@ if (!admin.apps.length) {
 const db = admin.firestore();
 
 /* =========================
-   Multer (Uploads)
-========================= */
-
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: 'dh-esports',
-    allowed_formats: ['jpg', 'png', 'jpeg', 'mp4', 'webp'],
-    public_id: (req, file) => Date.now() + '-' + file.originalname.split('.')[0],
-  },
-});
-
-const upload = multer({ storage });
-/* =========================
    Mail (Nodemailer)
 ========================= */
-
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
   port: Number(process.env.SMTP_PORT || 587),
@@ -99,9 +83,7 @@ const transporter = nodemailer.createTransport({
 
 /* =========================
    Sessions
-   - MemoryStore: بسيط لكنه غير مناسب للإنتاج على سيرفرات متعددة/Restart
 ========================= */
-
 const sessionConfig = {
   secret: process.env.SESSION_SECRET || 'your-secret-key',
   resave: false,
@@ -119,7 +101,6 @@ if (process.env.NODE_ENV === 'production') {
 /* =========================
    Middleware
 ========================= */
-
 app.use(session(sessionConfig));
 app.use(bodyParser.json({ limit: '10mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
@@ -128,7 +109,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // منع تكرار دخول الأدمن للوجين
 app.use((req, res, next) => {
   if (req.session.adminLoggedIn && req.path === '/admin-login.html') {
-  return res.redirect('/admin/dashboard');
+    return res.redirect('/admin/dashboard');
   }
   next();
 });
@@ -142,7 +123,6 @@ const isAdminAuthenticated = (req, res, next) => {
 /* =========================
    Notifications
 ========================= */
-
 const sendTelegramNotification = async (message) => {
   try {
     const botToken = process.env.TELEGRAM_BOT_TOKEN;
@@ -189,11 +169,8 @@ const sendEmailNotification = async (subject, htmlContent) => {
 };
 
 /* =========================
-   Admin bootstrap (create admin doc if not exists)
-   - collection: admin
-   - doc id: ADMIN_USERNAME
+   Admin bootstrap
 ========================= */
-
 const ensureAdminUser = async () => {
   try {
     const username = process.env.ADMIN_USERNAME || 'admin';
@@ -221,13 +198,13 @@ const ensureAdminUser = async () => {
 /* =========================
    API Routes (Frontend)
 ========================= */
-
-// Booking
+// Booking - رفع الفيديو مباشرة لكلاوديناري
 app.post('/api/booking', upload.single('bGameVideo'), async (req, res) => {
   try {
     const { bName, bEmail, bPhone, bScrim, bDuration, bAge } = req.body;
-const gameVideo = req.file ? req.file.path : null;
-     
+    // req.file.path أصبح الآن رابط Cloudinary الكامل
+    const gameVideoUrl = req.file ? req.file.path : null;
+
     const id = uuidv4();
 
     await db.collection('bookings').doc(id).set({
@@ -238,7 +215,7 @@ const gameVideo = req.file ? req.file.path : null;
       scrim: bScrim,
       duration: bDuration,
       age: bAge,
-      gameVideo,
+      gameVideoUrl, // تخزين رابط Cloudinary بدلاً من المسار المحلي
       status: 'pending',
       notes: null,
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
@@ -359,7 +336,6 @@ app.post('/api/contact', async (req, res) => {
 /* =========================
    Admin Routes
 ========================= */
-
 app.get('/admin/dashboard', isAdminAuthenticated, (req, res) => {
   res.sendFile(path.join(__dirname, 'dashboard.html'));
 });
@@ -431,7 +407,7 @@ app.post('/admin/update-booking/:id', isAdminAuthenticated, async (req, res) => 
   }
 });
 
-// Delete booking
+// Delete booking - ملاحظة: لا نحتاج لحذف ملف من Cloudinary هنا (يمكن إضافته اختيارياً)
 app.delete('/admin/delete-booking/:id', isAdminAuthenticated, async (req, res) => {
   try {
     const id = req.params.id;
@@ -442,12 +418,12 @@ app.delete('/admin/delete-booking/:id', isAdminAuthenticated, async (req, res) =
       return res.status(404).json({ success: false, message: 'الطلب غير موجود' });
     }
 
-    const booking = snap.data();
-
-    if (booking.gameVideo) {
-      const filePath = publicPathFromUrl(booking.gameVideo);
-      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-    }
+    // (اختياري) لحذف الفيديو من Cloudinary أيضاً:
+    // const booking = snap.data();
+    // if (booking.gameVideoUrl) {
+    //   const publicId = booking.gameVideoUrl.split('/').slice(-2).join('/').split('.')[0];
+    //   await cloudinary.uploader.destroy(publicId);
+    // }
 
     await docRef.delete();
 
@@ -526,7 +502,7 @@ app.post('/admin/send-message', isAdminAuthenticated, async (req, res) => {
   }
 });
 
-// Upload result
+// Upload result - رفع الملف مباشرة لكلاوديناري
 app.post('/admin/upload-result', isAdminAuthenticated, upload.single('resultFile'), async (req, res) => {
   try {
     const { playerPhone, playerName = 'غير معروف', type = 'booking' } = req.body;
@@ -536,8 +512,8 @@ app.post('/admin/upload-result', isAdminAuthenticated, upload.single('resultFile
     }
 
     const id = uuidv4();
-    const fileUrl = req.file.path;
-     
+    const fileUrl = req.file.path; // رابط Cloudinary الكامل
+
     await db.collection('results').doc(id).set({
       id,
       playerPhone,
@@ -554,7 +530,7 @@ app.post('/admin/upload-result', isAdminAuthenticated, upload.single('resultFile
   }
 });
 
-// Update result
+// Update result - مع رفع ملف جديد إلى Cloudinary إذا وجد
 app.post('/admin/update-result', isAdminAuthenticated, upload.single('editResultFile'), async (req, res) => {
   try {
     const { id, playerPhone, playerName } = req.body;
@@ -571,14 +547,17 @@ app.post('/admin/update-result', isAdminAuthenticated, upload.single('editResult
     }
 
     const old = snap.data();
-    const newFileUrl = req.file ? '/uploads/' + req.file.filename : old.fileUrl;
+    let newFileUrl = old.fileUrl;
 
-    // حذف الملف القديم لو في ملف جديد
-    if (req.file && old.fileUrl) {
-      const oldFilePath = publicPathFromUrl(old.fileUrl);
-      if (fs.existsSync(oldFilePath)) {
-        try { fs.unlinkSync(oldFilePath); } catch (e) { console.error('Error deleting old file:', e); }
-      }
+    // إذا تم رفع ملف جديد، احصل على الرابط الجديد
+    if (req.file) {
+      newFileUrl = req.file.path;
+      
+      // (اختياري) حذف الملف القديم من Cloudinary
+      // if (old.fileUrl) {
+      //   const oldPublicId = old.fileUrl.split('/').slice(-2).join('/').split('.')[0];
+      //   await cloudinary.uploader.destroy(oldPublicId);
+      // }
     }
 
     await docRef.update({
@@ -594,7 +573,7 @@ app.post('/admin/update-result', isAdminAuthenticated, upload.single('editResult
   }
 });
 
-// Delete result
+// Delete result - حذف من Firestore فقط (اختياري: حذف من Cloudinary أيضاً)
 app.delete('/admin/delete-result/:id', isAdminAuthenticated, async (req, res) => {
   try {
     const id = req.params.id;
@@ -607,11 +586,12 @@ app.delete('/admin/delete-result/:id', isAdminAuthenticated, async (req, res) =>
     }
 
     const result = snap.data();
-
-    if (result.fileUrl) {
-      const filePath = publicPathFromUrl(result.fileUrl);
-      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-    }
+    
+    // (اختياري) حذف الملف من Cloudinary
+    // if (result.fileUrl) {
+    //   const publicId = result.fileUrl.split('/').slice(-2).join('/').split('.')[0];
+    //   await cloudinary.uploader.destroy(publicId);
+    // }
 
     await docRef.delete();
 
@@ -625,7 +605,6 @@ app.delete('/admin/delete-result/:id', isAdminAuthenticated, async (req, res) =>
 /* =========================
    Static Routes
 ========================= */
-
 app.get('/login', (req, res) => {
   if (req.session.adminLoggedIn) return res.redirect('/admin/dashboard');
   res.sendFile(path.join(__dirname, 'admin-login.html'));
@@ -638,7 +617,6 @@ app.get('/', (req, res) => {
 /* =========================
    Start Server
 ========================= */
-
 let initialized = false;
 
 module.exports = async (req, res) => {
