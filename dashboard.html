@@ -725,13 +725,13 @@
         const data = await response.json();
 
         if (!data.loggedIn) {
-          window.location.href = '/admin-login.html';
+          window.location.href = '/login';
         } else {
           loadData();
         }
       } catch (error) {
         console.error('Error checking session:', error);
-        window.location.href = '/admin-login.html';
+        window.location.href = '/login';
       }
     }
 
@@ -1042,7 +1042,7 @@
       e.preventDefault();
       const email = document.getElementById('playerEmail').value;
       const message = document.getElementById('messageContent').value;
-      const senderName = document.getElementById('senderName').value || 'STORE King个ESPORTSツ';
+      const senderName = document.getElementById('senderName').value || 'clan DH_ESPORTSツ';
 
       try {
         const response = await fetch('/admin/send-message', {
