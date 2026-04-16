@@ -11,5 +11,12 @@
       "src": "/(.*)",
       "dest": "server.js"
     }
-  ]
+  ],
+  "functions": {
+    "server.js": {
+      "maxDuration": 10,
+      "memory": 1024,
+      "maxBodySize": "4.5mb"
+    }
+  }
 }
